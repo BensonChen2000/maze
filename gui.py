@@ -77,6 +77,14 @@ def display(map:List[List[int]]) -> None :
 
         return text_1_rect, text_2_rect, text_3_rect
     
+    def drawSoln(map, x_cor, y_cor):
+        for ver in map:
+            x_pos = x_cor+(ver.id % size) * (WALL_W + PATH_W)
+            y_pos = y_cor+(ver.id // size) * (WALL_W + PATH_W)
+            if ver.isSoln:
+                pygame.draw.rect(screen, WHITE, (x_pos + WALL_W, y_pos+WALL_W, PATH_W, PATH_W))    
+        
+
     def drawMaze(map, size): 
         maze_size = (size+1)*WALL_W + size*PATH_W
         x_cor = (SCREEN_WIDTH - maze_size) // 2
@@ -88,7 +96,6 @@ def display(map:List[List[int]]) -> None :
         for ver in map:
             x_pos = x_cor+(ver.id % size) * (WALL_W + PATH_W)
             y_pos = y_cor+(ver.id // size) * (WALL_W + PATH_W)
-         #   print(x_pos, y_pos)
             left_nei = False
             right_nei = False
             top_nei = False
@@ -129,6 +136,12 @@ def display(map:List[List[int]]) -> None :
         x = (SCREEN_WIDTH - men_rect.width - 10) 
         y = (SCREEN_HEIGHT - men_rect.height - 10) 
         draw_text(q_menu, men_rect, screen, x, y)
+        # draw menu solution_display button
+        soln_menu = font.render('show solution', 1, WHITE)
+        soln_men_rect = soln_menu.get_rect() 
+        x = (SCREEN_WIDTH - soln_men_rect.width - 10) 
+        y = (SCREEN_HEIGHT - soln_men_rect.height - 40) 
+        draw_text(soln_menu, soln_men_rect, screen, x, y)
 
         # game loop
         for event in pygame.event.get():
@@ -142,6 +155,23 @@ def display(map:List[List[int]]) -> None :
                     mixer.music.load("music/background.mp3")
                     mixer.music.play(-1)
                     return True
+                elif soln_men_rect.collidepoint(event.pos):
+                    drawSoln(map, x_cor, y_cor)
+                    while True:
+                        pygame.display.update()
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                pygame.quit()
+                                sys.exit() 
+                            if event.type == pygame.MOUSEBUTTONDOWN:
+                                if men_rect.collidepoint(event.pos):
+                                    mixer.music.load("music/background.mp3")
+                                    mixer.music.play(-1)
+                                    return True
+                                elif soln_men_rect.collidepoint(event.pos):
+                                    return False
+                                else: 
+                                    return False 
                 else:
                     return False
 
