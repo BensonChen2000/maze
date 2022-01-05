@@ -137,7 +137,7 @@ def display(map:List[List[int]]) -> None :
         y = (SCREEN_HEIGHT - men_rect.height - 10) 
         draw_text(q_menu, men_rect, screen, x, y)
         # draw menu solution_display button
-        soln_menu = font.render('show solution', 1, WHITE)
+        soln_menu = font.render('toggle solution', 1, WHITE)
         soln_men_rect = soln_menu.get_rect() 
         x = (SCREEN_WIDTH - soln_men_rect.width - 10) 
         y = (SCREEN_HEIGHT - soln_men_rect.height - 40) 
